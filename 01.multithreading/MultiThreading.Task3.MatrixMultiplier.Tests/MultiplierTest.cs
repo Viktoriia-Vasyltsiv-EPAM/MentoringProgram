@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MultiThreading.Task3.MatrixMultiplier.Matrices;
 using MultiThreading.Task3.MatrixMultiplier.Multipliers;
@@ -15,11 +16,27 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
             TestMatrix3On3(new MatricesMultiplierParallel());
         }
 
-        [TestMethod]
+        [TestMethod]        
         public void ParallelEfficiencyTest()
         {
-            // todo: implement a test method to check the size of the matrix which makes parallel multiplication more effective than
-            // todo: the regular one
+            long regularResultElapsedTime = 0;
+            long parallelResultElapsedTime = 0;
+            var effectiveSize = 0;
+            for (var sizeOfMatrix = 1; sizeOfMatrix < int.MaxValue; sizeOfMatrix++)
+            {
+                var firstMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix, true);
+                var secondMatrix = new Matrix(sizeOfMatrix, sizeOfMatrix, true);
+                regularResultElapsedTime = MultiplyMatricesGetElapsedTime(firstMatrix, secondMatrix, new MatricesMultiplier());
+                parallelResultElapsedTime = MultiplyMatricesGetElapsedTime(firstMatrix, secondMatrix, new MatricesMultiplierParallel());
+                if (regularResultElapsedTime > parallelResultElapsedTime)
+                {
+                    effectiveSize = sizeOfMatrix;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(regularResultElapsedTime > parallelResultElapsedTime);
+            Console.WriteLine($"Parallel multiplication more effective for matrix size - {effectiveSize}");
         }
 
         #region private methods
@@ -69,6 +86,15 @@ namespace MultiThreading.Task3.MatrixMultiplier.Tests
             Assert.AreEqual(109, multiplied.GetElement(2, 0));
             Assert.AreEqual(213, multiplied.GetElement(2, 1));
             Assert.AreEqual(728, multiplied.GetElement(2, 2));
+        }
+
+        long MultiplyMatricesGetElapsedTime(IMatrix m1, IMatrix m2, IMatricesMultiplier matricesMultiplier)
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            matricesMultiplier.Multiply(m1, m2);
+            stopWatch.Stop();
+            return stopWatch.ElapsedMilliseconds;
         }
 
         #endregion
