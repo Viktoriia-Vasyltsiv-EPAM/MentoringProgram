@@ -25,9 +25,11 @@ public class HomeController : Controller
         return View();
     }
 
-    public ActionResult Privacy()
+    public async Task<IActionResult> Privacy()
     {
-        ViewBag.Message = _privacyDataService.GetPrivacyDataAsync().Result;
+        // You are blocking main thread by using Result and wrap possible exception into Agregate exception, use async/await instead
+        // ViewBag.Message = _privacyDataService.GetPrivacyDataAsync().Result;
+        ViewBag.Message = await _privacyDataService.GetPrivacyDataAsync().ConfigureAwait(false);
         return View();
     }
 

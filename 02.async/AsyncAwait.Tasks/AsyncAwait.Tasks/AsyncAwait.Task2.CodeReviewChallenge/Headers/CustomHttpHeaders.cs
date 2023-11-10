@@ -1,6 +1,8 @@
 ﻿namespace AsyncAwait.Task2.CodeReviewChallenge.Headers;
 
-public class CustomHttpHeaders
+// Shouldn't it be static
+//public class CustomHttpHeaders
+public static class CustomHttpHeaders
 {
     public const string TotalPageVisits = "TotalPageVisits";
 }

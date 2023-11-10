@@ -19,24 +19,37 @@ public class StatisticMiddleware
         _statisticService = statisticService ?? throw new ArgumentNullException(nameof(statisticService));
     }
 
+
+    // This approach violates stateless principle, you would better to use separate endpoints to count page visits and get them (perform this requests using Ajax to not block the page from loading)
     public async Task InvokeAsync(HttpContext context)
     {
         string path = context.Request.Path;
 
-        var staticRegTask = Task.Run(
-            () => _statisticService.RegisterVisitAsync(path)
-                .ConfigureAwait(false)
-                .GetAwaiter().OnCompleted(UpdateHeaders));
-        Console.WriteLine(staticRegTask.Status); // just for debugging purposes
+        // Bad practice to wrap an async call in Task, use await instead
+        // Task staticRegTask = Task.Run(
+        //    () => _statisticService.RegisterVisitAsync(path)
+        //    .ConfigureAwait(false)
+        //    .GetAwaiter().OnCompleted(UpdateHeaders));
 
-        void UpdateHeaders()
-        {
-            context.Response.Headers.Add(
-                CustomHttpHeaders.TotalPageVisits,
-                _statisticService.GetVisitsCountAsync(path).GetAwaiter().GetResult().ToString());
-        }
 
-        Thread.Sleep(3000); // without this the statistic counter does not work
+        //Consider to use logger for this
+        //Console.WriteLine(staticRegTask.Status); // just for debugging purposes
+
+        await _statisticService.RegisterVisitAsync(path).ConfigureAwait(false);
+
+        // We don't need the local function this operation
+        //void UpdateHeaders()
+        //{
+        //    context.Response.Headers.Add(
+        //        CustomHttpHeaders.TotalPageVisits,
+        //        _statisticService.GetVisitsCountAsync(path).GetAwaiter().GetResult().ToString());
+        //}
+        context.Response.Headers.Add(
+            CustomHttpHeaders.TotalPageVisits,
+            (await _statisticService.GetVisitsCountAsync(path).ConfigureAwait(false)).ToString());
+
+
+        //Thread.Sleep(3000); // without this the statistic counter does not work
         await _next(context);
     }
 }

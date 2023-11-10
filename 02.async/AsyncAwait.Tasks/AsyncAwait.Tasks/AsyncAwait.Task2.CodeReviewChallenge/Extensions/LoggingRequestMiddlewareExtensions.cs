@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Builder;
 
 namespace AsyncAwait.Task2.CodeReviewChallenge.Extensions;
 
-public static class LoggingRequestMiddlewareExtensions
+// Confusing naming
+//public static class LoggingRequestMiddlewareExtensions
+public static class StatisticMiddlewareExtensions
 {
     public static IApplicationBuilder UseStatistic(this IApplicationBuilder builder)
     {
