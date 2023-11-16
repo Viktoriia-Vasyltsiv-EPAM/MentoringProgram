@@ -1,0 +1,11 @@
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\bin\Debug\net7.0\Core.deps.json
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\bin\Debug\net7.0\Core.dll
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\bin\Debug\net7.0\Core.pdb
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\Core.AssemblyInfoInputs.cache
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\Core.AssemblyInfo.cs
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\Core.csproj.CoreCompileInputs.cache
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\Core.dll
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\refint\Core.dll
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\Core.pdb
+C:\Users\Victoria_Vasyltsiv\.NET Mentoring Program Intermediate 2023 Q4 [UA]\MentoringProgram\03.message queues\MessageQueues\Core\obj\Debug\net7.0\ref\Core.dll
