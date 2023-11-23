@@ -8,7 +8,7 @@ namespace PasswordHash
         static void Main(string[] args)
         {
             const string password = "torrefatto_e_macinato";
-            var hash = GeneratePasswordHashUsingSalt(password, GetBytes(password));
+            var hash = GeneratePasswordHashUsingSalt(password, GenerateSaltFromGuid());
             Console.WriteLine(hash);
         }
 
@@ -22,11 +22,10 @@ namespace PasswordHash
             return Convert.ToBase64String(hashBytes);
         }
 
-        static byte[] GetBytes(string str)
+        static byte[] GenerateSaltFromGuid()
         {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
+            Guid guid = Guid.NewGuid();
+            return guid.ToByteArray();
         }
     }
 }
