@@ -10,6 +10,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web;
 using Expressions.Task3.E3SQueryProvider.Models.Entities;
 using Xunit;
 
@@ -35,7 +36,8 @@ namespace Expressions.Task3.E3SQueryProvider.Test
              */
 
             // todo: create asserts for this test by yourself, because they will depend on your final implementation
-            throw new NotImplementedException("Please implement this test and the appropriate functionality");
+            string translated = translator.TranslateIntoE3S(expression);
+            Assert.Equal(@"""statements"": [{""query"":""Workstation:(EPRUIZHW006)""},{""query"":""Manager:(John*)""},]", translated);
         }
 
         #endregion

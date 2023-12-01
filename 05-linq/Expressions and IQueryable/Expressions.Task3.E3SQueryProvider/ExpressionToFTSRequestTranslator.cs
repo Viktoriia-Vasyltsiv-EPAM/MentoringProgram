@@ -8,6 +8,9 @@ namespace Expressions.Task3.E3SQueryProvider
     public class ExpressionToFtsRequestTranslator : ExpressionVisitor
     {
         readonly StringBuilder _resultStringBuilder;
+        private string beforeValueAppend = string.Empty;
+        private string afterValueAppend = string.Empty;
+        private bool isTranslateIntoE3S = false;
 
         public ExpressionToFtsRequestTranslator()
         {
@@ -17,6 +20,16 @@ namespace Expressions.Task3.E3SQueryProvider
         public string Translate(Expression exp)
         {
             Visit(exp);
+
+            return _resultStringBuilder.ToString();
+        }
+
+        public string TranslateIntoE3S(Expression exp)
+        {
+            isTranslateIntoE3S = true;
+            _resultStringBuilder.Append(@"""statements"": [");
+            Visit(exp);
+            _resultStringBuilder.Append("]");
 
             return _resultStringBuilder.ToString();
         }
@@ -33,6 +46,22 @@ namespace Expressions.Task3.E3SQueryProvider
 
                 return node;
             }
+            else if (node.Method.DeclaringType == typeof(string))
+            {
+                switch (node.Method.Name)
+                {
+                    case "Contains":
+                        beforeValueAppend = "*";
+                        afterValueAppend = "*";
+                        break;
+                    case "EndsWith":
+                        beforeValueAppend = "*";
+                        break;
+                    case "StartsWith":
+                        afterValueAppend = "*";
+                        break;
+                }
+            }
             return base.VisitMethodCall(node);
         }
 
@@ -41,18 +70,19 @@ namespace Expressions.Task3.E3SQueryProvider
             switch (node.NodeType)
             {
                 case ExpressionType.Equal:
-                    if (node.Left.NodeType != ExpressionType.MemberAccess)
-                        throw new NotSupportedException($"Left operand should be property or field: {node.NodeType}");
+                    var nodes = new[] { node.Left, node.Right };
+                    var memberNode = nodes.FirstOrDefault(n => n.NodeType == ExpressionType.MemberAccess);
+                    var constantNode = nodes.FirstOrDefault(n => n.NodeType == ExpressionType.Constant);
+                    if (memberNode is null || constantNode is null)
+                        throw new NotSupportedException($"Unable to parse the expression");
 
-                    if (node.Right.NodeType != ExpressionType.Constant)
-                        throw new NotSupportedException($"Right operand should be constant: {node.NodeType}");
-
-                    Visit(node.Left);
-                    _resultStringBuilder.Append("(");
-                    Visit(node.Right);
-                    _resultStringBuilder.Append(")");
+                    Visit(memberNode);
+                    Visit(constantNode);
                     break;
-
+                case ExpressionType.AndAlso:
+                    Visit(node.Left);
+                    Visit(node.Right);
+                    break;
                 default:
                     throw new NotSupportedException($"Operation '{node.NodeType}' is not supported");
             };
@@ -62,14 +92,27 @@ namespace Expressions.Task3.E3SQueryProvider
 
         protected override Expression VisitMember(MemberExpression node)
         {
-            _resultStringBuilder.Append(node.Member.Name).Append(":");
+            if (isTranslateIntoE3S)
+            {
+                _resultStringBuilder.Append(@"{""query"":""");
+            }
+            _resultStringBuilder
+                .Append(node.Member.Name);
 
             return base.VisitMember(node);
         }
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
-            _resultStringBuilder.Append(node.Value);
+            _resultStringBuilder
+                .Append($":({beforeValueAppend}")
+                .Append(node.Value)
+                .Append($"{afterValueAppend})");
+
+            if (isTranslateIntoE3S)
+            {
+                _resultStringBuilder.Append(@"""},");
+            }
 
             return node;
         }

@@ -13,7 +13,7 @@ namespace Expressions.Task3.E3SQueryProvider
         private readonly string _baseAddress;
 
         #region Constructors
-        
+
         public FtsRequestGenerator(string baseAddress)
         {
             _baseAddress = baseAddress;
